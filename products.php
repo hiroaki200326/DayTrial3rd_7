@@ -1,24 +1,9 @@
 <?php
+  require_once './classes/product.php';
   $products = [
-    [
-      "name" => "アボカド",
-      "price" => 230,
-      "image" => "./images/image_1.jpg"  
-    ],
-    [
-      "name" => "オレンジ",
-      "price" => 120,
-      "image" => "./images/image_2.jpg"  
-    ],
-    [
-      "name" => "レモン",
-      "price" => 200,
-      "image" => "./images/image_3.jpg"  
-    ],
-    [
-      "name" => "パイナップル",
-      "price" => 300,
-      "image" => "./images/image_4.jpg"  
-    ]
+    new Product("avocado", "アボカド", 230, "./images/image_1.jpg"),
+    new Product("orange", "オレンジ", 120, "./images/image_2.jpg"),
+    new Product("lemon", "レモン", 200, "./images/image_3.jpg"),
+    new Product("pnapple", "パイナップル", 300, "./images/image_4.jpg")
   ];
 ?>
