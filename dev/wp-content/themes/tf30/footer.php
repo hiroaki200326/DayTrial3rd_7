@@ -1,18 +1,23 @@
 	<!-- footer-menu -->
 	<div id="footer-menu">
 		<div class="inner">
-			<div class="footer-logo"><a href="/">TF-30</a></div><!-- /footer-logo -->
-			<div class="footer-sub">サブタイトルが入りますサブタイトルが入ります</div><!-- /footer-sub -->
+			<!-- <div class="footer-logo"><a href="/">TF-30</a></div>/footer-logo -->
+			<!-- <div class="footer-sub">サブタイトルが入りますサブタイトルが入ります</div>/footer-sub -->
+			<div class="footer-logo"><a href="<?php echo esc_url(home_url('/')); ?>"><?php bloginfo('name'); ?></a></div><!-- /footer-logo -->
+			<div class="footer-sub"><?php bloginfo('description'); //ブログのdescriptionを表示 ?></div><!-- /footer-sub -->
 
-			<nav class="footer-nav">
-				<ul class="footer-list">
-					<li class="menu-item"><a href="#">メニュー1</a></li>
-					<li class="menu-item"><a href="#">メニュー2</a></li>
-					<li class="menu-item"><a href="#">メニュー3</a></li>
-					<li class="menu-item"><a href="#">メニュー4</a></li>
-					<li class="menu-item"><a href="#">メニュー5</a></li>
-				</ul>
-			</nav>
+			<?php
+				//.drawer-navを置き換えて、スマホ用メニューを動的に表示する
+				wp_nav_menu(
+					array(
+					'depth' => 1,
+					'theme_location' => 'footer', //ドロワーメニューをここに表示すると指定
+					'container' => 'nav',
+					'container_class' => 'footer-nav',
+					'menu_class' => 'footer-list',
+					)
+				);
+			?>
 
 		</div><!-- /inner -->
 	</div><!-- /footer-menu -->
