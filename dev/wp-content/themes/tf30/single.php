@@ -33,120 +33,94 @@
               <?php endif; ?>
               <h1 class="entry-title"><?php the_title(); ?></h1><!-- /entry-title -->
 
-              <div class="entry-label"><a href="<?php the_permalink(); //記事のリンクを表示 ?>">カテゴリ名</a></div><!-- /entry-item-tag -->
-              <h1 class="entry-title">記事のタイトルが入ります記事のタイトルが入ります記事のタイトルが入ります</h1><!-- /entry-title -->
-
               <!-- entry-meta -->
               <div class="entry-meta">
-                <time class="entry-published" datetime="2019-01-01">公開日 2019/1/1</time>
-                <time class="entry-updated" datetime="2019-04-01">最終更新日 2019/4/1</time>
+                <time class="entry-published" datetime="<?php the_time( 'c' ); ?>">公開日 <?php the_time( 'Y/n/j' ); ?></time>
+                <?php if ( get_the_modified_time( 'Y-m-d' ) !== get_the_time( 'Y-m-d' ) ) : ?>
+                  <time class="entry-updated" datetime="<?php the_modified_time( 'c' ); ?>">最終更新日 <?php the_modified_time( 'Y/n/j' ); ?></time>
+                <?php endif; ?>
               </div><!-- /entry-meta -->
 
               <!-- entry-img -->
               <div class="entry-img">
-                <img src="img/entry1.png" alt="">
+                <?php
+                  if ( has_post_thumbnail() ) {
+                    the_post_thumbnail( 'large' );
+                  }
+                ?>
               </div><!-- /entry-img -->
-
             </div><!-- /entry-header -->
 
             <!-- entry-body -->
             <div class="entry-body">
-              <p>
-                テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-              </p>
-
-              <div id="toc_container">
-                <p class="toc_title">この記事のコンテンツ</p>
-                <ul class="toc_list">
-                  <li><a href="#i">見出しが入ります</a>
-                    <ul>
-                      <li><a href="#">見出しが入ります</a></li>
-                      <li><a href="#">見出しが入ります</a></li>
-                    </ul>
-                  </li>
-                  <li><a href="#i">見出しが入ります</a>
-                    <ul>
-                      <li><a href="#">見出しが入ります</a></li>
-                      <li><a href="#">見出しが入ります</a></li>
-                    </ul>
-                  </li>
-                </ul>
-              </div>
-
-              <h2>見出しが入ります</h2>
-              <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト<a
-                  href="#">テキストリンクテキストリンク</a>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-              </p>
-              <h3>見出しが入ります</h3>
-              <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト<a
-                  href="#">テキストリンクテキストリンク</a>テキストテキストテキストテキストテキスト<strong>テキストボールドテキストボールド</strong>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-              </p>
-              <h4>見出しが入ります</h4>
-              <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト<a
-                  href="#">テキストリンクテキストリンク</a>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-              </p>
-              <h4>見出しが入ります</h4>
-              <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト<a
-                  href="#">テキストリンクテキストリンク</a>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-              </p>
-              <div class="entry-btn"><a class="btn" href="">テキストテキスト</a></div><!-- /entry-btn -->
-
+              <?php
+                //本文の表示
+                the_content(); ?>
+              <?php
+                //改ページを有効にするための記述
+                wp_link_pages(
+                  array(
+                  'before' => '<nav class="entry-links">',
+                  'after' => '</nav>',
+                  'link_before' => '',
+                  'link_after' => '',
+                  'next_or_number' => 'number',
+                  'separator' => '',
+                  )
+                );
+              ?>
             </div><!-- /entry-body -->
 
-
+            <!-- entry-tag-items -->
+            <?php $post_tags = get_the_tags(); ?>
             <div class="entry-tag-items">
               <div class="entry-tag-head">タグ</div><!-- /entry-tag-head -->
-              <div class="entry-tag-item"><a href="">WordPress</a></div><!-- /entry-tag-item -->
-              <div class="entry-tag-item"><a href="">コーディング</a></div><!-- /entry-tag-item -->
-              <div class="entry-tag-item"><a href="">フリーランス</a></div><!-- /entry-tag-item -->
+              <?php if ( $post_tags ) : ?>
+                <?php foreach ( $post_tags as $tag ) : ?>
+                  <div class="entry-tag-item"><a href="<?php echo esc_url( get_tag_link($tag->term_id) ); ?>"><?php echo esc_html( $tag->name ); ?></a></div><!-- /entry-tag-item -->
+                <?php endforeach; ?>
+              <?php endif; ?>
             </div><!-- /entry-tag-items -->
 
-
+            <!-- /entry-related -->
             <div class="entry-related">
               <div class="related-title">関連記事</div>
 
               <div class="related-items">
-
-                <a class="related-item" href="">
-                  <div class="related-item-img"><img src="img/entry1.png" alt=""></div><!-- /related-item-img -->
-                  <div class="related-item-title">記事のタイトルが入ります記事のタイトルが入ります記事のタイトルが入ります</div><!-- /related-item-title -->
-                </a><!-- /related-item -->
-
-                <a class="related-item" href="">
-                  <div class="related-item-img"><img src="img/entry1.png" alt=""></div><!-- /related-item-img -->
-                  <div class="related-item-title">記事のタイトルが入ります記事のタイトルが入ります記事のタイトルが入ります</div><!-- /related-item-title -->
-                </a><!-- /related-item -->
-
-                <a class="related-item" href="">
-                  <div class="related-item-img"><img src="img/entry1.png" alt=""></div><!-- /related-item-img -->
-                  <div class="related-item-title">記事のタイトルが入ります記事のタイトルが入ります記事のタイトルが入ります</div><!-- /related-item-title -->
-                </a><!-- /related-item -->
-
-                <a class="related-item" href="">
-                  <div class="related-item-img"><img src="img/entry1.png" alt=""></div><!-- /related-item-img -->
-                  <div class="related-item-title">記事のタイトルが入ります記事のタイトルが入ります記事のタイトルが入ります</div><!-- /related-item-title -->
-                </a><!-- /related-item -->
-
-                <a class="related-item" href="">
-                  <div class="related-item-img"><img src="img/entry1.png" alt=""></div><!-- /related-item-img -->
-                  <div class="related-item-title">記事のタイトルが入ります記事のタイトルが入ります記事のタイトルが入ります</div><!-- /related-item-title -->
-                </a><!-- /related-item -->
-
-                <a class="related-item" href="">
-                  <div class="related-item-img"><img src="img/entry1.png" alt=""></div><!-- /related-item-img -->
-                  <div class="related-item-title">記事のタイトルが入ります記事のタイトルが入ります記事のタイトルが入ります</div><!-- /related-item-title -->
-                </a><!-- /related-item -->
-
-                <a class="related-item" href="">
-                  <div class="related-item-img"><img src="img/entry1.png" alt=""></div><!-- /related-item-img -->
-                  <div class="related-item-title">記事のタイトルが入ります記事のタイトルが入ります記事のタイトルが入ります</div><!-- /related-item-title -->
-                </a><!-- /related-item -->
-
-                <a class="related-item" href="">
-                  <div class="related-item-img"><img src="img/entry1.png" alt=""></div><!-- /related-item-img -->
-                  <div class="related-item-title">記事のタイトルが入ります記事のタイトルが入ります記事のタイトルが入ります</div><!-- /related-item-title -->
-                </a><!-- /related-item -->
-
+                <?php 
+                  $myposts = get_posts(
+                    array(
+                      'posts_per_page' => '8',
+                      'post__not_in' => array(get_the_ID()),
+                      'category__in' => wp_get_post_categories(get_the_ID()),
+                      'orderby' => 'rand'
+                    )
+                  );
+                ?>
+                <?php
+                  if($myposts):
+                    foreach ($myposts as $post):
+                      setup_postdata($post);
+                  ?>
+                  <a class="related-item" href="<?php the_permalink(); //記事のリンクを表示 ?>">
+                    <div class="related-item-img">
+                      <?php
+                        if (has_post_thumbnail() ) {
+                          // アイキャッチ画像が設定されてれば大サイズで表示
+                          the_post_thumbnail('large');
+                        } else {
+                          // なければnoimage画像をデフォルトで表示
+                          echo '<img src="' . esc_url(get_template_directory_uri()) . '/img/noimg.png" alt="">';
+                        }
+                      ?>
+                    </div><!-- /related-item-img -->
+                    <div class="related-item-title"><?php the_title(); ?></div><!-- /related-item-title -->
+                  </a><!-- /related-item -->
+                <?php 
+                  endforeach;
+                  wp_reset_postdata();
+                  endif;
+                ?>
               </div><!-- /related-items -->
             </div><!-- /entry-related -->
 
