@@ -25,12 +25,7 @@
 
             <!-- entry-header -->
             <div class="entry-header">
-              <?php
-                // カテゴリー１つ目の名前を表示
-                $category = get_the_category();
-                if ( $category[0] ) : ?>
-                  <div class="entry-label"><a href="<?php echo esc_url( get_category_link( $category[0]->term_id ) ); ?>"><?php echo $category[0]->cat_name; ?></a></div><!-- /entry-item-tag -->
-              <?php endif; ?>
+              <div class="entry-item-tag"><?php my_the_post_category(true); ?></div>
               <h1 class="entry-title"><?php the_title(); ?></h1><!-- /entry-title -->
 
               <!-- entry-meta -->
@@ -72,57 +67,13 @@
             </div><!-- /entry-body -->
 
             <!-- entry-tag-items -->
-            <?php $post_tags = get_the_tags(); ?>
             <div class="entry-tag-items">
               <div class="entry-tag-head">タグ</div><!-- /entry-tag-head -->
-              <?php if ( $post_tags ) : ?>
-                <?php foreach ( $post_tags as $tag ) : ?>
-                  <div class="entry-tag-item"><a href="<?php echo esc_url( get_tag_link($tag->term_id) ); ?>"><?php echo esc_html( $tag->name ); ?></a></div><!-- /entry-tag-item -->
-                <?php endforeach; ?>
-              <?php endif; ?>
+              <?php my_the_post_tags(); ?>
             </div><!-- /entry-tag-items -->
 
             <!-- /entry-related -->
-            <div class="entry-related">
-              <div class="related-title">関連記事</div>
-
-              <div class="related-items">
-                <?php 
-                  $myposts = get_posts(
-                    array(
-                      'posts_per_page' => '8',
-                      'post__not_in' => array(get_the_ID()),
-                      'category__in' => wp_get_post_categories(get_the_ID()),
-                      'orderby' => 'rand'
-                    )
-                  );
-                ?>
-                <?php
-                  if($myposts):
-                    foreach ($myposts as $post):
-                      setup_postdata($post);
-                  ?>
-                  <a class="related-item" href="<?php the_permalink(); //記事のリンクを表示 ?>">
-                    <div class="related-item-img">
-                      <?php
-                        if (has_post_thumbnail() ) {
-                          // アイキャッチ画像が設定されてれば大サイズで表示
-                          the_post_thumbnail('large');
-                        } else {
-                          // なければnoimage画像をデフォルトで表示
-                          echo '<img src="' . esc_url(get_template_directory_uri()) . '/img/noimg.png" alt="">';
-                        }
-                      ?>
-                    </div><!-- /related-item-img -->
-                    <div class="related-item-title"><?php the_title(); ?></div><!-- /related-item-title -->
-                  </a><!-- /related-item -->
-                <?php 
-                  endforeach;
-                  wp_reset_postdata();
-                  endif;
-                ?>
-              </div><!-- /related-items -->
-            </div><!-- /entry-related -->
+            <?php get_template_part('template-parts/entry-related'); ?>
 
           </article> <!-- /entry -->
           
