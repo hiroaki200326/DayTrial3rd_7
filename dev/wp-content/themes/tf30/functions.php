@@ -218,3 +218,52 @@ function set_post_views() {
   //$countが0のままの場合（404や該当記事の検索結果が0件の場合）は何もしない。
 }
 add_action( 'template_redirect', 'set_post_views', 10 );
+
+
+
+
+/**
+
+* 検索結果から固定ページを除外する
+
+* @param string $search SQLのWHERE句の検索条件文
+
+* @param object $wp_query WP_Queryのオブジェクト
+
+* @return string $search 条件追加後の検索条件文
+
+*/
+
+function my_posts_search( $search, $wp_query ){
+
+  //検索結果ページ・メインクエリ・管理画面以外の3つの条件が揃った場合
+
+  if ( $wp_query->is_search() && $wp_query->is_main_query() && !is_admin() ){
+
+    // 検索結果を投稿タイプに絞る
+
+    $search .= " AND post_type = 'post' ";
+
+    return $search;
+
+  }
+
+  return $search;
+
+}
+
+add_filter('posts_search','my_posts_search', 10, 2);
+
+
+/**
+* ボタンのショートコード
+*
+* @param array $atts ショートコードの引数.
+* @param string $content ショートコードのコンテンツ.
+* @return string ボタンのHTMLタグ.
+* @codex https://wpdocs.osdn.jp/%E9%96%A2%E6%95%B0%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9/add_shortcode
+*/
+function my_shortcode( $atts, $content = '' ) {
+  return '<div class="entry-btn"><a class="btn" href="' . $atts['link'] . '">' . $content . '</a></div><!-- /entry-btn -->';
+}
+add_shortcode( 'btn', 'my_shortcode' );
