@@ -29,3 +29,13 @@ jQuery('a[href^="#"]').click(function () {
 	);
 	return false;
 });
+
+/* Code highlight */
+hljs.initHighlightingOnLoad();
+
+jQuery('div.code').each(function(i, block) {
+  hljs.highlightBlock(block);
+});
+hljs.configure({
+  tabReplace: '  ' // 2文字分のスペースを入力
+});

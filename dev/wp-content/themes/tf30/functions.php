@@ -37,7 +37,9 @@ add_action('after_setup_theme', 'my_setup');
 function my_script_init()
 {
   wp_enqueue_style('fontawesome', 'https://use.fontawesome.com/releases/v5.8.2/css/all.css', array(), '5.8.2', 'all');
+  wp_enqueue_style('highlight', get_template_directory_uri() . '/css/tomorrow-night-blue.css', array(), '1.0.0', 'all');
   wp_enqueue_style('my', get_template_directory_uri() . '/css/style.css', array(), '1.0.0', 'all');
+  wp_enqueue_script('highlight', get_template_directory_uri() . '/js/highlight.pack.js', array( 'jquery' ), '1.0.0', true);
   wp_enqueue_script('my', get_template_directory_uri() . '/js/script.js', array( 'jquery' ), '1.0.0', true);
   //sns.jsを追記
   if( is_single() ){
@@ -267,3 +269,41 @@ function my_shortcode( $atts, $content = '' ) {
   return '<div class="entry-btn"><a class="btn" href="' . $atts['link'] . '">' . $content . '</a></div><!-- /entry-btn -->';
 }
 add_shortcode( 'btn', 'my_shortcode' );
+
+function do_not_convert_from_tab_to_space( $text ) {
+  $text = str_replace( "半角スペースを4つ分、記載する", "\t", $text );
+  return $text;
+}
+add_filter( "wpcom_markdown_transform_post", "do_not_convert_from_tab_to_space" );
+
+/**
+* コードハイライト表示のショートコード
+*
+* @param array $atts ショートコードの引数.
+* @param string $content ショートコードのコンテンツ.
+* @return string ボタンのHTMLタグ.
+* @codex https://wpdocs.osdn.jp/%E9%96%A2%E6%95%B0%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9/add_shortcode
+*/
+function my_hilightcode( $atts = '', $content = '' ) {
+  return '<pre><code class="' . $atts['type'] . '">'.$content .'</code></pre>';
+}
+add_shortcode( 'hcode', 'my_hilightcode' );
+
+/**
+* 文字列をタグあり・なしで返すショートコード
+*
+* @param array $atts ショートコードの引数.
+* @param string $content ショートコードのコンテンツ.
+* @return string タグあり・なしの文字列.
+* @codex https://wpdocs.osdn.jp/%E9%96%A2%E6%95%B0%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9/add_shortcode
+*/
+function my_returntext( $atts = '', $content = '' ) {
+  if ($atts == '') {
+  }
+  else {
+    // <tag>$content</tag>
+    $content = '<'.$atts['tag'].'>'.$content.'</'.$atts['tag'].'>';
+  }
+  return $content;
+}
+add_shortcode( 'rtn', 'my_returntext' );

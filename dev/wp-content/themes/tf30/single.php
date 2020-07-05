@@ -75,8 +75,29 @@
             <!-- /entry-related -->
             <?php get_template_part('template-parts/entry-related'); ?>
 
+            <!-- Short code - Contact button -->
+            <?php
+              echo do_shortcode('[btn link="' . esc_url(home_url('/')). 'contact/"]お問い合わせはこちら[/btn]');
+            ?>
+
           </article> <!-- /entry -->
-          
+                <!-- <pre>
+                  <code class="html">
+function $initHighlight(block, cls) {
+  try {
+    if (cls.search(/\bno\-highlight\b/) != -1)
+      return process(block, true, 0x0F) + 
+        ' class=""';
+  } catch (e) {
+  /* handle exception */
+  }
+  for (var i = 0 / 2; i < classes.length; i++) {
+    if (checkCondition(classes[i]) === undefined)
+      return /\d+[\s/]/g;
+  }
+}                    
+                  </code>
+                </pre> -->
         <?php
           endwhile;
           endif;
@@ -90,10 +111,6 @@
 	</div><!-- /content -->
 
   <?php get_footer(); ?>
-
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-	<script src="js/script.js"></script>
-	<script src="js/sns.js"></script>
 
 </body>
 
